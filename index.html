@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark" data-accent="gold" data-element="النار">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07080b">
+<title>MS Zodiac</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♈</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<canvas id="element-bg" aria-hidden="true"></canvas>
+<div class="element-aura" id="elementAura" data-el="النار"></div>
+
+<audio id="landingAudio" loop preload="auto" crossorigin="anonymous"></audio>
+
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><span>MS</span></div>
+      <div class="brand-copy">
+        <div class="brand-name">MS ZODIAC</div>
+        <div class="brand-maker">DEV Mohamed Samir</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="homeBtn" type="button" aria-label="الصفحة الرئيسية" title="الصفحة الرئيسية">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+      <button class="ghost-btn" id="kdBtn" type="button">🔮 كشف الأبراج</button>
+      <div class="accent-picker" role="group" aria-label="لون">
+        <button class="accent-swatch active" data-accent-value="gold" aria-label="ذهبي"></button>
+        <button class="accent-swatch" data-accent-value="blue" aria-label="أزرق"></button>
+        <button class="accent-swatch" data-accent-value="rose" aria-label="وردي"></button>
+        <button class="accent-swatch" data-accent-value="emerald" aria-label="زمردي"></button>
+        <button class="accent-swatch" data-accent-value="violet" aria-label="بنفسجي"></button>
+      </div>
+      <div class="music-control-wrap" id="musicControlWrap">
+        <button class="icon-btn" id="musicBtn" type="button" aria-label="الموسيقى" title="الموسيقى">
+          <svg id="musicIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+        </button>
+        <div class="music-control-menu" id="musicControlMenu" aria-hidden="true">
+          <div class="music-control-head">
+            <span class="music-control-title">تحكم في الأغنية</span>
+            <span class="music-control-status" id="musicControlStatus">متوقفة</span>
+          </div>
+          <div class="music-control-row">
+            <button class="music-mini-btn" id="musicPlayPause" type="button" aria-label="تشغيل الأغنية">
+              <svg id="musicPlayPauseIcon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            </button>
+            <input class="music-control-range" id="musicVolume" type="range" min="0" max="1" step="0.01" value="0.35" aria-label="مستوى صوت الأغنية">
+          </div>
+          <div class="music-current-track">
+            <span class="music-track-label">الأغنية الحالية</span>
+            <span class="music-track-name" id="musicTrackName">أي العيون الحلوة دي</span>
+          </div>
+          <div class="music-track-heading">اختر الأغنية</div>
+          <div class="music-track-list" role="radiogroup" aria-label="اختيار الأغنية">
+            <button class="music-track-option active" id="musicTrackOption0" type="button" data-track-index="0" role="radio" aria-checked="true">
+              <span class="music-track-radio" aria-hidden="true"></span>
+              <span class="music-track-option-copy"><strong>أي العيون الحلوة دي</strong><small>MS ZODIAC</small></span>
+              <span class="music-track-playing" id="musicTrackPlaying0" aria-hidden="true">♫</span>
+            </button>
+            <button class="music-track-option" id="musicTrackOption1" type="button" data-track-index="1" role="radio" aria-checked="false">
+              <span class="music-track-radio" aria-hidden="true"></span>
+              <span class="music-track-option-copy"><strong>مسمعين</strong><small>MS ZODIAC</small></span>
+              <span class="music-track-playing" id="musicTrackPlaying1" aria-hidden="true">♫</span>
+            </button>
+          </div>
+          <div class="music-track-notice" id="musicTrackNotice" hidden>فيه أغنية تانية متاحة تقدر تختارها من القائمة.</div>
+          <div class="music-control-label">
+            <span>الصوت</span>
+            <span id="musicVolumeValue">35%</span>
+          </div>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="تبديل الوضع"><svg id="themeIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
+      <button class="icon-btn" id="soundBtn" type="button" aria-label="الصوت"><svg id="soundIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg></button>
+      <button class="icon-btn" id="savedBtn" type="button" aria-label="المحفوظات"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+      <button class="ghost-btn" id="headerNew" type="button" hidden>تحليل جديد</button>
+    </div>
+  </header>
+
+  <section class="view active" id="landingView">
+    <div class="hero">
+      <div class="hero-inner premium-stagger">
+        <div class="eyebrow">ZODIAC EXPERIENCE</div>
+        <h1><span>MS ZODIAC</span></h1>
+        <p class="hero-sub">تجربة تفاعلية لاكتشاف برجك، صفاته، طريقة تواصله، وعلاقته بالأبراج الأخرى.</p>
+        <div class="birth-zone">
+          <div class="dp-wrap" id="landingDP"></div>
+          <div class="helper">يُستخدم تاريخ الميلاد فقط. لا تحتاج إلى وقت أو مكان الميلاد.</div>
+          <div class="error" id="dateError" aria-live="polite"></div>
+          <div class="start-btn-wrap">
+            <button class="start-btn" id="startBtn" type="button" disabled><span>ابدأ الاكتشاف</span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="resultView">
+    <div class="discover fade-in">
+      <div class="discover-shell" id="discoverShell">
+        <div class="discover-top">
+          <div><div class="kicker">YOUR ZODIAC</div><div class="discover-date" id="discoverDate">—</div></div>
+          <div class="progress-wrap"><div class="kicker">PROFILE</div><div class="progress"><span id="progressBar"></span></div><div class="progress-label" id="progressLabel">01 / 12</div></div>
+        </div>
+        <div class="reveal-stage play" id="revealStage">
+          <div class="ring ring-a"></div><div class="ring ring-b"></div>
+          <div class="orbit-signs" id="orbitSigns"></div>
+          <div class="orb">
+            <div class="orb-symbol" id="orbSymbol">♈</div>
+            <div class="orb-meta"><div class="orb-name" id="orbName">الحمل</div><div class="orb-range" id="orbRange">21 مارس — 19 أبريل</div></div>
+          </div>
+          <div class="reveal-copy">اضغط على أي برج حول المركز لاستكشافه</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile">
+      <div class="profile-head">
+        <section class="identity pop">
+          <div class="identity-top">
+            <div><div class="sign-index" id="signIndex">01 / 12</div><h2 id="signTitle">الحمل</h2><div class="identity-range" id="signRange">21 مارس — 19 أبريل</div></div>
+            <div class="sign-symbol" id="signSymbol">♈</div>
+          </div>
+          <div class="tags" id="signTags"></div>
+        </section>
+        <section class="snapshot pop" id="snapshot"></section>
+      </div>
+
+      <section class="wheel-section">
+        <div class="wheel-header">
+          <div><div class="section-kicker">THE ZODIAC WHEEL</div><div class="section-title">عجلة الأبراج</div></div>
+          <div class="section-kicker">اضغط أي برج حول العجلة</div>
+        </div>
+        <div class="wheel-layout">
+          <div class="wheel-svg-wrap"><svg class="zodiac-wheel" id="zodiacWheel" viewBox="0 0 500 500"></svg></div>
+          <div id="wheelInfoWrap"></div>
+        </div>
+      </section>
+
+      <section class="music-card" id="musicCard"></section>
+      <section class="mbti-card" id="mbtiCard"></section>
+      <section class="radar-card" id="radarCard"></section>
+      <section class="energy-card" id="energyCard"></section>
+
+      <section class="explore">
+        <nav class="explore-nav" id="modeNav"></nav>
+        <div class="explore-body" id="modeBody"></div>
+      </section>
+
+      <section class="myth-section" id="mythSection"></section>
+      <section class="twin-section" id="twinSection"></section>
+
+      <section class="section-block">
+        <div class="section-head"><div><div class="section-kicker">BEST MATCHES</div><div class="section-title">أقوى 3 توافقات</div></div></div>
+        <div class="top3-grid" id="top3Grid"></div>
+      </section>
+
+      <section class="section-block" id="matrixSection">
+        <div class="section-head"><div><div class="section-kicker">MATRIX</div><div class="section-title">جدول التوافق</div></div></div>
+        <div class="matrix-note">📊 <strong>الصف</strong> (يمين) = برجك · <strong>العمود</strong> (أعلى) = البرج المقابل · الخلية = نسبة التوافق · اضغط للانتقال.</div>
+        <div class="matrix-wrap"><div class="matrix" id="matrixGrid"></div></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-head"><div><div class="section-kicker">FRIEND</div><div class="section-title">توافق مع صديق</div></div></div>
+        <div class="friend-section">
+          <div class="dp-wrap" id="friendDP"></div>
+          <button class="friend-btn" id="friendCalcBtn" type="button" disabled>احسب التوافق</button>
+        </div>
+        <div id="friendResult"></div>
+      </section>
+
+      <section class="section-block" id="dailySection"></section>
+
+      <section class="section-block">
+        <div class="section-head"><div><div class="section-kicker">EXPLORE ALL</div><div class="section-title">الأبراج الـ12</div></div></div>
+        <div class="all-grid" id="allSignsGrid"></div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-head"><div><div class="section-kicker">SAVED</div><div class="section-title">المحفوظات</div></div><button class="ghost-btn" id="saveCurrentBtn" type="button" style="padding:9px 16px;font-size:12px">احفظ</button></div>
+        <div id="savedBody"></div>
+      </section>
+
+      <div class="bottom-actions">
+        <button class="new-btn" id="newAnalysis" type="button">بدء تحليل جديد</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="signature" role="contentinfo">
+    <span class="sig-icon">✦</span>
+    <span class="sig-label">DEV</span>
+    <span class="sig-dot"></span>
+    <span class="sig-name">Mohamed Samir</span>
+    <span class="sig-dot"></span>
+    <span class="sig-icon">✦</span>
+  </div>
+</div>
+
+<div class="kd-modal" id="kdModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="kd-panel">
+    <button class="kd-close" id="kdClose" type="button" aria-label="إغلاق">×</button>
+    <div class="kd-screen active" data-screen="intro">
+      <div class="kd-intro">
+        <div class="kd-eyebrow">ZODIAC DETECTION</div>
+        <h2>كشف الأبراج 🔮</h2>
+        <p>ادخل اسمك، اختر برجك، وخلينا نشوف... أنت فعلًا برجك ولا أنت حاجة تانية؟ 😏</p>
+      </div>
+      <input class="kd-input" id="kdName" type="text" placeholder="اسمك (اختياري)" maxlength="30" autocomplete="given-name">
+      <div class="kd-sign-label">اختر برجك</div>
+      <div class="kd-sign-grid" id="kdSignGrid"></div>
+      <div style="text-align:center"><button class="kd-start" id="kdStartBtn" type="button" disabled>ابدأ الاختبار</button></div>
+    </div>
+    <div class="kd-screen" data-screen="question">
+      <div class="kd-progress">
+        <div class="kd-progress-bar"><span id="kdProgressBar"></span></div>
+        <div class="kd-progress-text" id="kdProgressText">1 من 12</div>
+      </div>
+      <div id="kdQuestionWrap"></div>
+    </div>
+    <div class="kd-screen" data-screen="result"><div id="kdResultWrap"></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="energyGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#8da9a0"/><stop offset="50%" stop-color="#d7bf87"/><stop offset="100%" stop-color="#f0dfad"/></linearGradient>
+    <linearGradient id="kdGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#d7bf87"/><stop offset="100%" stop-color="#b89f68"/></linearGradient>
+  </defs>
+</svg>
+
+<script src="data.js" defer></script>
+<script src="script.js" defer></script>
+<script src="security.js" defer></script>
+
+</body>
+</html>
